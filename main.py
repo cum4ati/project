@@ -1,8 +1,11 @@
 import requests
 from pprint import pprint
 from objects import Meme, User
+from dotenv import load_dotenv
+import os
 
-TOKEN = '34b6b66ed69aa8cd8e145f825b8a3269d870d5118d5a1140d1da390ca86c63c633cedfac465d9c535c2c1'
+load_dotenv()
+TOKEN = os.getenv('TOKEN')
 BASE_URL = 'https://api.vk.com/method/'
 
 
