@@ -1,8 +1,11 @@
+import pprint
+
 import requests
 import aiohttp
 from objects import Meme, User
 from dotenv import load_dotenv
 import os
+import asyncio
 
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
@@ -27,20 +30,32 @@ async def get_photos_from_public(public_id: int, album_id: int) -> list[Meme]:
             return memes
 
 
-async def get_all_memes_from_vesdekode() -> list[str]:
+async def get_all_memes_from_vesdekode() -> list[Meme]:
     data: list[Meme] = await get_photos_from_public(-197700721, 281940823)
-    memes_str_data_list = [f'Автор - {meme.author.user_url}, Лайков - {meme.likes}, Ссылка на мем - {meme.url}' for meme in data]
-    return memes_str_data_list
+    return data
 
 
-def task_1():
-    memes: list[Meme] = get_all_memes_from_vesdekode()
-    for meme in memes:
-        print(f'Author link - {meme.author.user_url}, Likes: {meme.likes}, meme link: {meme.url}')
+async def get_meme_data_json() -> list[dict]:
+    data = await get_all_memes_from_vesdekode()
+    meme_json = [
+        {'meme_num': index,
+         'meme_author': meme.author.user_url,
+         'meme_likes': meme.likes,
+         'meme_url': meme.url}
+        for index, meme in enumerate(data, start=1)
+    ]
+    return meme_json
+
+
+async def task_1():
+    memes: list[dict] = await get_meme_data_json()
+    pprint.pprint(memes)
 
 
 def main():
-    task_1()
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(task_1())
+    loop.close()
 
 
 if __name__ == '__main__':

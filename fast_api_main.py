@@ -17,8 +17,8 @@ async def say_hello(name: str):
 
 @app.get('/task_1')
 async def task_1():
-    memes = await api_helper.get_all_memes_from_vesdekode()
+    memes = await api_helper.get_meme_data_json()
     print(memes)
     return {
-        "data": '\n\n'.join(memes)
+        "data": memes
     }
