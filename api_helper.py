@@ -48,14 +48,13 @@ async def get_meme_data_json() -> list[dict]:
 
 
 async def task_1():
-    memes: list[dict] = await get_meme_data_json()
+    memes: list[Meme] = await get_all_memes_from_vesdekode()
     pprint.pprint(memes)
 
 
 def main():
     loop = asyncio.new_event_loop()
     loop.run_until_complete(task_1())
-    loop.close()
 
 
 if __name__ == '__main__':
